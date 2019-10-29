@@ -58,7 +58,7 @@ This LIRI node application is similair to the iPhone's SIRI. Instead of speech i
 
 **Examples**    
 
-View of the [code](https://drive.google.com/open?id=1hlTmzi0Yahh6Q9rsx1B-oAGk0tUoCtmx/view)
+View of the [code](https://drive.google.com/file/d/1hlTmzi0Yahh6Q9rsx1B-oAGk0tUoCtmx/view)
 
 Search for a [concert](https://drive.google.com/file/d/1o9dnaciO3eYslOUegtntPXqc8iy_N3IL/view)
 
