@@ -9,6 +9,9 @@ var Spotify = require('node-spotify-api');
 // Code required to import the keys.js file and store it in a variable
 var keys = require("./keys.js");
 
+// Includes the FS package for reading and writing packages
+var fs = require("fs");
+
 // Able to access keys for spotify
 var spotify = new Spotify(keys.spotify);
 
@@ -21,13 +24,13 @@ var entSearch = process.argv.slice(3).join(" ").trim();
 // Create switch statment so when command is used the corresponding function is run
 switch (command) {
     case "concert-this":
-        concertThis(entSearch);
+        concertThis();
         break;
     case "spotify-this-song":
-        spotifyThis(entSearch);
+        spotifyThis();
         break;
     case "movie-this":
-        movieThis(entSearch);
+        movieThis();
         break;
     case "do-what-it-says":
         doWhat();
@@ -157,5 +160,24 @@ function movieThis() {
 }
 
 function doWhat() {
+    // read the random.txt file to get data information and run 
+    fs.readFile("random.txt", "utf8", function(err, data) {
+        if (err) {
+          return console.log(err);
+        }
+      
+        // Break the string down by comma separation and store the contents into the output array.
+        var output = data.split(",");
+        command = output[0];
+        entSearch = output[1];
+
+        if (command === "concert-this"){
+            concertThis();
+        } else if (command === "movie-this"){
+            movieThis();
+        } else {
+           spotifyThis(); 
+        }
+      });
 
 }
