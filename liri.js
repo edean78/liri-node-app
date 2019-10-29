@@ -24,10 +24,10 @@ switch (command) {
         concertThis(entSearch);
         break;
     case "spotify-this-song":
-        spotifyThis();
+        spotifyThis(entSearch);
         break;
     case "movie-this":
-        movieThis();
+        movieThis(entSearch);
         break;
     case "do-what-it-says":
         doWhat();
@@ -35,31 +35,81 @@ switch (command) {
 }
 
 function concertThis() {
+    if (!entSearch) {
+        entSearch = "Chris Stapleton"
+    }
 
+    var queryUrl = "https://rest.bandsintown.com/artists/" + entSearch + "/events?app_id=codingbootcamp";
+
+    axios
+        .get(queryUrl)
+        .then(function (response) {
+
+            var concertInfo = response.data;
+
+            // If the axios was successful...
+            for (var i = 0; i < concertInfo.length; i++) {
+                var venueName = concertInfo[i].venue.name;
+                var venueLocation = concertInfo[i].venue.region;
+                var dateEvent = concertInfo[i].datetime;
+                var eventDate = moment(dateEvent).format("MM/DD/YYYY");
+
+                console.log("----------------------------");
+                console.log(`Name of Venue: ${venueName}\nVenue Location: ${venueLocation}\nDate of the Event: ${eventDate}`);
+                console.log("----------------------------");
+            }
+
+        })
+        .catch(function (error) {
+            if (error.response) {
+                // The request was made and the server responded with a status code
+                // that falls out of the range of 2xx
+                console.log("---------------Data---------------");
+                console.log(error.response.data);
+                console.log("---------------Status---------------");
+                console.log(error.response.status);
+                console.log("---------------Status---------------");
+                console.log(error.response.headers);
+            } else if (error.request) {
+                // The request was made but no response was received
+                // `error.request` is an object that comes back with details pertaining to the error that occurred.
+                console.log(error.request);
+            } else {
+                // Something happened in setting up the request that triggered an Error
+                console.log("Error", error.message);
+            }
+            console.log(error.config);
+        });
 }
 
 function spotifyThis() {
     if (!entSearch) {
-        entSearch = "All the Small Things"
+        entSearch = "Whiskey Glasses"
     }
     spotify.search({ type: 'track', query: entSearch, limit: 5 }, function (err, data) {
         if (err) {
             return console.log('Error occurred: ' + err);
         }
 
-        var info = data.tracks.items[0];
+        var songInfo = data.tracks.items;
 
-        console.log("Artist: " + info.artists.name);
-        console.log("Song Name: " + info.name);
-        console.log("Preview: " + info.preview_url);
-        console.log("Album: " + info.album.name);
-        console.log("------------------------------");
+        for (var i = 0; i < songInfo.length; i++) {
+            var songArtist = songInfo[i].artists.name;
+            var songName = songInfo[i].name;
+            var songPreview = songInfo[i].preview_url;
+            var songAlbum = songInfo[i].album.name;
+
+            console.log("-----------------------------------");
+            console.log(`Artist: ${songArtist}\nSong Name: ${songName}\nPreview: ${songPreview}\nAlbum: ${songAlbum}`);
+            console.log("-----------------------------------");
+
+        }
     });
 };
 
 function movieThis() {
     if (!entSearch) {
-        entSearch = "Mr Nobody"
+        entSearch = "Tombstone"
     }
 
     var queryUrl = "http://www.omdbapi.com/?t=" + entSearch + "&y=&plot=short&apikey=trilogy";
@@ -79,8 +129,7 @@ function movieThis() {
             var movieActors = movieInfo.Actors;
 
             // If the axios was successful...
-            // Then log the body from the site!
-            // console.log(response.data);
+            // Then log the movie information
             console.log("--------------------------------------\n");
             console.log(`Title: ${movieTitle}\nYear movie was released: ${movieYear}\nIMDB Rating: ${movieIMDB}\nRotten Tomatoes Rating: ${movieRT}\nCountry: ${movieCountry}\nLanguage: ${movieLanguage}\nPlot: ${moviePlot}\nActors: ${movieActors}`);
             console.log("--------------------------------------");
