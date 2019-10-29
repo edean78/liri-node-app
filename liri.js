@@ -177,7 +177,8 @@ function doWhat() {
             movieThis();
         } else {
            spotifyThis(); 
-        }
+        };
+        
       });
 
 }
